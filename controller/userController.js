@@ -50,7 +50,7 @@ const loginUser = (req,res,next) => {
   } catch(err){
     res.status(404).json({
       success: false,
-      message: "Some inernal error occured!", retryWrites
+      message: "Some inernal error occured!"
     })
   }
 }
