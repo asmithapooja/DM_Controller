@@ -40,7 +40,6 @@ const loginUser = async (req,res,next) => {
     await User.findOne({username: username})
     .then(async data => {
       let dataId = await dataServerId(content);
-      console.log(dataId);
       if(data){
         if(data.cs.toString() === dataId){
           if(data.password !== password){
