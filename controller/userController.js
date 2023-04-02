@@ -1,6 +1,8 @@
 const User = require("../models/User");
 const Content = require("../models/cs");
 
+
+// Add New Users
 const addUser = async (req,res,next) => {
   console.log("Program coming here")
   try{
@@ -27,33 +29,48 @@ const addUser = async (req,res,next) => {
   }
 }
 
-const loginUser = (req,res,next) => {
+
+// Login User
+const loginUser = async (req,res,next) => {
   try{
-    password = req.body.password,
-    cs = req.body.cs 
-    User.findOne({cs: cs})
-      .then(data => {
-        if(data){
+    let username = req.body.username
+    let password = req.body.password
+    let content = req.params.id
+    
+    await User.findOne({username: username})
+    .then(async data => {
+      let dataId = await dataServerId(content);
+      console.log(dataId);
+      if(data){
+        if(data.cs.toString() === dataId){
           if(data.password !== password){
             res.status(401).json({
               success: false,
-              message: "Incorrect Password"
+              message: "Please check your crendetials"
             })
           } else {
             res.status(200).json({
               success: true,
-              message: "User Found",
-              cs : data.cs,
-              authId: data._id
+              message: "Login Success",
+              username: data.username,
+              dataServer: data.cs
             })
           }
         } else {
           res.status(404).json({
             success: false,
-            message: "User not found"
+            messgae: "Data server not found"
           })
         }
-      })
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "User not found"
+        })
+      }
+    })
+    
+    
   } catch(err){
     res.status(404).json({
       success: false,
@@ -62,6 +79,14 @@ const loginUser = (req,res,next) => {
   }
 }
 
+// Find Data Server Id by data server address!
+async function dataServerId(dataAdd){
+  const result = await Content.findOne({cs: dataAdd});
+  return result._id.toString();
+}
+
+
+// All Users
 const allUsers = (req,res,next) => {
   User.find({})
     .then(data => {
@@ -106,7 +131,7 @@ const deleteUser = (req,res,next) => {
     })
   })
   .catch(err => {
-    res.status(200).json({
+    res.status(400).json({
       success: false,
       message: "Some internal error occured!"
     })

@@ -15,12 +15,14 @@ router.post("/:id/adduser", userController.addUser);
 
 router.post("/:id/updateuser", userController.updateUser);
 
-router.post("/loginuser", userController.loginUser);
+router.post("/:id/loginuser", userController.loginUser);
 
 router.post("/:id/deleteuser", userController.deleteUser);
 
 // POST request for data server!
 router.post("/:id/addcontent", contentController.addCs);
+
+router.post("/:id/updatedataserver", contentController.updateDataServer);
 
 // GET Request for all the servers
 router.get("/alluser", userController.allUsers);
