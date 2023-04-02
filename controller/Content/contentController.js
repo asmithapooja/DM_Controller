@@ -16,7 +16,7 @@ const addCs = (req,res,next) => {
       })
     })
     .catch(err => {
-        res.status(200).json({
+        res.status(400).json({
             success : false,
             message : "Some Internal Error Occured!"
         })
@@ -33,13 +33,32 @@ function allDataServer(req,res,next){
       })
     })
     .catch(err => {
-      res.status(200).json({
+      res.status(400).json({
         success: false,
         message: "Some internal error occured!"
       })
     })
 }
 
+// Update data server address!
+function updateDataServer(req,res,next){
+  Content.findByIdAndUpdate(req.params.id, {
+    cs: req.body.cs
+  })
+  .then(data => {
+    res.status(200).json({
+      success: true,
+      message: "Data server updated!"
+    })
+  })
+  .catch(err => {
+    res.status(404).json({
+      success: false,
+      message: "Some internal error occured!"
+    })
+  })
+}
+
 module.exports = {
-  addCs, allDataServer
+  addCs, allDataServer, updateDataServer
 }
