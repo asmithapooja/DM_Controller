@@ -4,7 +4,6 @@ const Content = require("../models/cs");
 
 // Add New Users
 const addUser = async (req,res,next) => {
-  console.log("Program coming here")
   try{
     const user = new User({
       username: req.body.username,
@@ -13,7 +12,6 @@ const addUser = async (req,res,next) => {
     })
     // If user object created fine, then add the reference to the content schema!
     if(user){
-      console.log(user);
       await Content.findByIdAndUpdate({_id: user.cs}, {$push: {user: user._id}});
     }
     await user.save()
