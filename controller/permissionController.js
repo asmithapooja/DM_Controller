@@ -1,0 +1,63 @@
+const Permission = require("../models/Permissions");
+
+const User = require("../models/User");
+
+const permissions = ["View", "Edit", "Download", "Delete"];
+
+
+// Add permissions to the respective user!
+const addPermissions = async (req,res,next) => {
+  try{
+    const perm = new Permission({
+      permission: req.body.permission,
+      user: req.body.user
+    })
+    
+    // If perm object exists!
+    if(perm){
+      await User.findByIdAndUpdate({_id: perm.user}, {$push: {permission: perm._id}});
+    }
+    
+    await perm.save()
+    res.status(200).json({
+      success: true,
+      message: "Permission added to the respective user!"
+    })
+    
+  } catch(err){
+    res.status(200).json({
+      success: false,
+      message: "Some internal error occured!"
+    })
+  }
+}
+
+// Send all permissions to the client to choose!
+const permission = async (req,res,next) => {
+  res.status(200).json({
+    success: true,
+    message: permissions
+  })
+}
+
+// View all users permissions!
+const allPermissions = async (req,res,next) => {
+  Permission.find({})
+    .then(data => {
+      res.status(200).json({
+        success: true,
+        message: data
+      })
+    })
+    .catch(err => {
+      res.status(400).json({
+        success: false,
+        message: "Some server error occured!"
+      })
+    })
+}
+
+
+module.exports = {
+  addPermissions, allPermissions, permission
+}

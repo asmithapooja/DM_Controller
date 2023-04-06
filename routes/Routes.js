@@ -9,6 +9,7 @@ const User = require("../models/User");
 // Required Controllers
 const userController = require("../controller/userController");
 const contentController = require("../controller/Content/contentController");
+const permissionController = require("../controller/permissionController");
 
 // POST Request
 router.post("/:id/adduser", userController.addUser);
@@ -26,6 +27,13 @@ router.post("/:id/updatedataserver", contentController.updateDataServer);
 
 // GET Request for all the servers
 router.get("/alluser", userController.allUsers);
+
+// POST request for permission
+router.post("/addpermission", permissionController.addPermissions);
+
+router.get("/allpermissionusers", permissionController.allPermissions);
+
+router.get("/permissions", permissionController.permission);
 
 router.get("/alldataserver", contentController.allDataServer);
 
