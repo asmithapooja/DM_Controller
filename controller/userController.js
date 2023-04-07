@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Content = require("../models/cs");
+const Permission = require("../models/Permissions");
 
 
 // Add New Users
@@ -46,11 +47,13 @@ const loginUser = async (req,res,next) => {
               message: "Please check your crendetials"
             })
           } else {
+            const perm = await getPermissionById(data.permission);
             res.status(200).json({
               success: true,
               message: "Login Success",
               username: data.username,
-              dataServer: data.cs
+              dataServer: data.cs,
+              permission: perm
             })
           }
         } else {
@@ -74,6 +77,18 @@ const loginUser = async (req,res,next) => {
       message: "Some inernal error occured!"
     })
   }
+}
+
+// Get Permission By Id!
+async function getPermissionById(id){
+  
+  const result = [];
+  
+  for(i = 0; i <= id.length - 1; i++){
+    const res = await Permission.findById({_id: id[i]});
+    result.push(res.permission);
+  }
+  return result;
 }
 
 // Find Data Server Id by data server address!
