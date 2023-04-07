@@ -57,7 +57,41 @@ const allPermissions = async (req,res,next) => {
     })
 }
 
+// Delete permission for the specific user!
+const deletePermission = (req,res,next) => {
+  Permission.findByIdAndDelete(req.body.permId)
+    .then(async data => {
+      await User.findByIdAndUpdate({_id: req.body.userid}, {$set: {permission: []}})
+      res.status(200).json({
+        success: true,
+        message: "Permissions deleted for the user!"
+      })
+    })
+    .catch(err => {
+      res.status(400).json({
+        success: false,
+        message: "Some internal error occured!"
+      })
+    })
+}
+
+const deleteAll = (req,res,next) => {
+  Permission.deleteMany({})
+    .then(data => {
+      res.status(200).json({
+        success: true,
+        message: "Permissions deleted!"
+      })
+    })
+    .catch(err => {
+      res.status(400).json({
+        success: false,
+        message: "Some internal error occured!"
+      })
+    })
+}
+
 
 module.exports = {
-  addPermissions, allPermissions, permission
+  addPermissions, allPermissions, permission, deletePermission, deleteAll
 }

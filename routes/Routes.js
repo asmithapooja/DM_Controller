@@ -35,6 +35,10 @@ router.get("/allpermissionusers", permissionController.allPermissions);
 
 router.get("/permissions", permissionController.permission);
 
+router.post("/deletepermission", permissionController.deletePermission);
+
+router.post("/deleteallpermission", permissionController.deleteAll);
+
 router.get("/alldataserver", contentController.allDataServer);
 
 module.exports = router;
