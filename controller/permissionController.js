@@ -61,7 +61,7 @@ const allPermissions = async (req,res,next) => {
 const deletePermission = (req,res,next) => {
   Permission.findByIdAndDelete(req.body.permId)
     .then(async data => {
-      await User.findByIdAndUpdate({_id: req.body.userid}, {$set: {permission: []}})
+      await User.findByIdAndUpdate({_id: req.body.userid}, {$pull: {permission: req.body.permId}})
       res.status(200).json({
         success: true,
         message: "Permissions deleted for the user!"
